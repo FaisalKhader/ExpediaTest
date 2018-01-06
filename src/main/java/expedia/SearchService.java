@@ -11,7 +11,7 @@ public class SearchService {
 	
 	
 	public static void main(String[] args) {
-		port(8080);
+		port(80);
 		staticFiles.location("/public");
 		
 		post("/search", (request, response) -> {
