@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Expedia Hotel Search</title>
+</head>
+<body>
+
+
+	<div id="app">
+
+		<form method="post" @submit.prevent="searchNow">
+		      <div>
+		        <span>Destination:</span>
+		        <span><input type="text" name="" value="" placeholder="Destination" v-model="destinationName"></span>
+		        <span><input type="text" name="" value="" placeholder="City" v-model="destinationCity"></span>
+		        <span><input type="text" name="" value="" placeholder="Region Id" v-model="regionIds"></span>
+		        
+		      </div>
+		      <div>
+		      </br>
+		        <span>Min Start Date</span>
+		        <span><input type="text" name="" value="" placeholder="(format: :2017-05-03)" v-model="minTripStartDate">-</span>
+		        <span>Max Start Date</span>
+		        <span><input type="text" name="" value="" placeholder="(format: :2017-05-03)" v-model="maxTripStartDate"></span>
+		        
+		      </div>
+		      <div>
+		      	</br>
+		        <span>Length of Stay</span>
+		        <span><input type="text" name="" value="" v-model="lengthOfStay"></span>
+		      </div>
+
+		      <div>
+		      	</br>
+		        <span>Star Rating </span>
+		        <span><input type="text" name="" value="" v-model="minStarRating"> - <input type="text" name="" value="" v-model="maxStarRating"></span>
+		      </div>
+
+		      <div>
+		      	</br>
+		        <span>Total Rating</span>
+		        <span><input type="text" name="" value="" v-model="minTotalRate"> - <input type="text" name="" value="" v-model="maxTotalRate"></span>
+		      </div>
+		      
+		      <div>
+		      	</br>
+		        <span>Guest Rating</span>
+		        <span><input type="text" name="" value="" v-model="minGuestRating"> - <input type="text" name="" value="" v-model="maxGuestRating"></span>
+		      </div>
+
+		      
+		      <div>
+		      </br>
+		        <span>
+		          <button type="submit" name="button">Search</button>
+		        </span>
+		      </div>  
+		
+		</form>
+
+
+<span v-if="showData" >
+
+		<div>
+		</br>
+			<table >
+				<tr>
+					<td width="200px"><span>Offer Info</span></td>
+					<td><span>User Info</span></td>
+				</tr>
+				<tr>
+					<td><span>Site Id: {{ results.offerInfo.siteID }} </span></td>
+					<td><span>Persona Type: {{
+							results.userInfo.persona.personaType }} </span>
+				</tr>
+				<tr>
+					<td><span>Language: {{ results.offerInfo.language }} </span></td>
+					<td><span>User ID: {{ results.userInfo.userId }} </span></td>
+				</tr>
+				<tr>
+					<td><span>Currency: {{ results.offerInfo.currency }}</span></td>
+				</tr>
+				<tr>
+					<td><span>User Selected Currency: {{
+							results.offerInfo.userSelectedCurrency }}</span></td>
+				</tr>
+
+			</table>
+
+		</div>
+		------------------------------------------------------------------------<br />
+		<h1>Hotels Offer:</h1>
+		<span v-for="result in results.offers.Hotel">
+
+			<div>
+				<span><b>Offer Range Date</b></br></span>
+				From Date: {{result.offerDateRange.travelStartDate}} -- 
+				To Date:{{result.offerDateRange.travelEndDate}} </br> 
+				Length Of Stay:{{result.offerDateRange.lengthOfStay}}
+			</div>
+			
+			<div>
+				<span><b></br>Destination:</b></br></span>
+				Region ID: {{result.destination.regionID}}</br>
+				Associated MultiCity Region ID: {{result.destination.associatedMultiCityRegionId}}</br>
+				Long Name: {{result.destination.longName}}</br>
+				Short Name: {{result.destination.shortName}}</br>
+				Country: {{result.destination.country}}</br>
+				City: {{result.destination.city}}</br>
+				TLA: {{result.destination.tla}}</br>
+				Non Localized City: {{result.destination.nonLocalizedCity}}				
+			</div>
+			
+			<div>
+				<span><b></br>Hotel Info:</b></br></span>
+				<img alt="" :src="result.hotelInfo.hotelImageUrl"></br>
+					Hotel Id: {{result.hotelInfo.hotelId}}</br>
+					Hotel Name: {{result.hotelInfo.hotelName}}</br>
+					Localized Name: {{result.hotelInfo.localizedHotelName}}</br>
+					Hotel Destination Id: {{result.hotelInfo.hotelDestinationRegionID}}</br>
+					Hotel Long Destination: {{result.hotelInfo.hotelLongDestination}}</br>
+					Hotel Address: {{result.hotelInfo.hotelStreetAddress}}</br>
+					Hotel City: {{result.hotelInfo.hotelCity}}</br>
+					Hotel Province: {{result.hotelInfo.hotelProvince}}</br>
+					Hotel Country Code: {{result.hotelInfo.hotelCountryCode}}</br>
+					Hotel Latitude: {{result.hotelInfo.hotelLatitude}}</br>
+					Hotel Longitude: {{result.hotelInfo.hotelLongitude}}</br>
+					Star Rating: {{result.hotelInfo.hotelStarRating}}</br>
+					Guest Rating: {{result.hotelInfo.hotelGuestReviewRating}}</br>
+					Total Rating: {{result.hotelInfo.hotelReviewTotal}}</br>				
+ 				   Official Rating <input type="checkbox" v-model="result.hotelInfo.isOfficialRating" disabled="disabled"  />
+ 
+			</div>
+			
+			<div>
+				<span><b></br>Hotel Urgency Info:</b></br></span>
+					Air Attach Remaining Time: {{result.hotelUrgencyInfo.airAttachRemainingTime}}</br>
+					Number Of People Viewing: {{result.hotelUrgencyInfo.numberOfPeopleViewing}}</br>
+					Number Of People Booked: {{result.hotelUrgencyInfo.numberOfPeopleBooked}}</br>
+					Number Of Rooms Left: {{result.hotelUrgencyInfo.numberOfRoomsLeft}}</br>
+					Last Booked Time: {{result.hotelUrgencyInfo.lastBookedTime}}</br>
+					Almost Sold Status: {{result.hotelUrgencyInfo.almostSoldStatus}}</br>
+					Hotel Link: <a :href="result.hotelUrgencyInfo.link" target="_blank">Click Here </a></br>
+ 				    Air Attach Enabled <input type="checkbox" v-model="result.hotelUrgencyInfo.airAttachEnabled"  disabled="disabled" />
+ 
+			</div>
+			
+			
+			<div>
+				<span><b></br>Hotel Pricing Info:</b></br></span>
+					Average Price: {{result.hotelPricingInfo.averagePriceValue}}</br>
+					Total Price: {{result.hotelPricingInfo.totalPriceValue}}</br>
+					Cross Out Price: {{result.hotelPricingInfo.crossOutPriceValue}}</br>
+					Original Price/Night: {{result.hotelPricingInfo.originalPricePerNight}}</br>
+					Currency: {{result.hotelPricingInfo.currency}}</br>
+					Percent Saving: {{result.hotelPricingInfo.percentSavings}} %</br>
+ 				    DRR <input type="checkbox" v-model="result.hotelPricingInfo.drr" disabled="disabled"  />
+ 
+			</div>
+			
+			<div>
+				<span><b></br>For More Details:</b></br></span>
+					Hotel Site Link: <a :href="result.hotelUrls.hotelInfositeUrl" target="_blank">Click Here </a></br>
+ 				    Hotel Search Result Link: <a :href="result.hotelUrls.hotelSearchResultUrl" target="_blank">Click Here </a></br>
+ 
+			</div>
+			
+			------------------------------------------------------------------------<br />
+		</span>
+		</span>
+</div>
+	
+
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script>
+    const vm = new Vue({
+    el: '#app',
+    data: {
+        results: [],
+        destinationName:'',
+        destinationCity:'',
+        regionIds:'',
+        minTripStartDate:'',
+        maxTripStartDate:'',
+        lengthOfStay:'',
+        minStarRating:'',
+        maxStarRating:'',
+        minTotalRate:'',
+        maxTotalRate:'',
+        minGuestRating:'',
+        maxGuestRating:'',
+        showData: false
+    },
+    methods: {
+        searchNow: function() {
+          
+          data = new  URLSearchParams();
+          data.append('destinationName', vm.destinationName);
+          data.append('destinationCity', vm.destinationCity);
+          data.append('regionIds', vm.regionIds);
+          data.append('minTripStartDate', vm.minTripStartDate);
+          data.append('minTripStartDate', vm.lengthOfStay);
+          data.append('minStarRating', vm.minStarRating);
+          data.append('maxStarRating', vm.maxStarRating);
+          data.append('minTotalRate', vm.minTotalRate);
+          data.append('maxTotalRate', vm.maxTotalRate);
+          data.append('minGuestRating', vm.minGuestRating);
+          data.append('maxGuestRating', vm.maxGuestRating);
+          
+          
+
+          axios.post('/search', data)
+          .then(response =>{ 
+          console.log(response.data);
+          this.results = response.data;          
+          showData = true;
+          this.$nextTick(function() {
+              this.showData = true;
+          });
+          console.log(showData);
+            });
+           }
+         }
+       });
+    
+    
+    
+    
+/*    mounted() {
+        axios.get("https://offersvc.expedia.com/offers/v2/getOffers?scenario=deal-finder&page=foo&uid=foo&productType=Hotel")
+        .then(response => {
+            console.log('ttt2')
+            this.results = response.data;
+            console.log(this.results);
+        })
+    }
+});*/
+
+</script>
+
+
+</html>
