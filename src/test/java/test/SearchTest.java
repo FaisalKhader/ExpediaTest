@@ -11,7 +11,7 @@ public class SearchTest {
 	
 	public static String url = "https://offersvc.expedia.com/offers/v2/getOffers?scenario=deal-finder&page=foo&uid=foo&productType=Hotel";
 	
-	private Map<String,String> params = new HashMap<>();
+	private Map<String,String> params = new HashMap<String,String>();
 
 	@Test
 	public void testSearchApi(){
